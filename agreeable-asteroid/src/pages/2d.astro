@@ -1,7 +1,7 @@
 ---
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.astro';
-import Carousel from '../components/Carousel.jsx';
+import Gallery from '../components/Gallery';
 
 const galleryImages = [
   "/images/870-536x354-blur_2-grayscale.jpg",
@@ -26,11 +26,13 @@ const galleryImages = [
     <Navbar client:visible />
 
     <main>
-      <h2 class="centered">Aktuality</h2>
-      <Carousel images={galleryImages} client:only="react" />
-
-      <h2 class="centered">Reference</h2>
-      <p class="centered">Some reference text goes here.</p>
+      <section class="gallery-section">
+        <div class="gallery-text">
+          <h2>2D Works</h2>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
+        </div>
+        <Gallery images={galleryImages} client:only="react"></Gallery>
+      </section>
     </main>
 
     <Footer />

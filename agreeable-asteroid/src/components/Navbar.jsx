@@ -5,7 +5,7 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="logo">Agáta Slámová</div>
+      <a href="/" className="logo">agáta slámová</a>
       <button className="hamburger" onClick={() => setOpen(!open)}>
         ☰
       </button>
@@ -20,7 +20,7 @@ export default function Navbar() {
           </ul>
         </div>
         <a href="/výstavy">Výstavy</a>
-        <a href="/life-story">Life Story</a>
+        <a href="/life-story">Lajf Story</a>
       </nav>
     </header>
   );
