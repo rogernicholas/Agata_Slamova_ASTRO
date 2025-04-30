@@ -1,0 +1,31 @@
+---
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Agáta Slámová</title>
+
+    <style global>
+      @import '../styles/reset.css';
+      @import '../styles/styles.css';
+    </style>
+  </head>
+  <body>
+    <Navbar />
+
+    <main>
+      <h2 class="centered">Aktuality</h2>
+      <div class="carousel">
+        <img src="https://via.placeholder.com/300x200" alt="Placeholder" />
+      </div>
+
+      <h2 class="centered">Reference</h2>
+      <p class="centered">Some reference text goes here.</p>
+    </main>
+
+    <Footer />
+  </body>
+</html>
