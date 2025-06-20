@@ -5,22 +5,22 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <a href="/" className="logo">agáta slámová</a>
+      <a href="main" className="logo">agáta slámová</a>
       <button className="hamburger" onClick={() => setOpen(!open)}>
         ☰
       </button>
       <nav className={`nav-links ${open ? 'open' : ''}`}>
-        <a href="/projekty">Projekty</a>
+        <a href="/projekty">projekty</a>
         <div className="dropdown">
-          <a href="#">Tvorba</a>
+          <a href="#">tvorba</a>
           <ul className="dropdown-content">
             <li><a href="/2d">2D</a></li>
             <li><a href="/3d">3D</a></li>
             <li><a href="/4d">4D</a></li>
           </ul>
         </div>
-        <a href="/výstavy">Výstavy</a>
-        <a href="/life-story">Lajf Story</a>
+        <a href="/vystavy">výstavy</a>
+        <a href="/lajfstory">lajf story</a>
       </nav>
     </header>
   );

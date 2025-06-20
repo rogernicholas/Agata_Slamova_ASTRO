@@ -1,0 +1,41 @@
+---
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.astro';
+import Gallery from '../components/Gallery';
+
+const galleryImages = [
+  "/images/870-536x354-blur_2-grayscale.jpg",
+  "/images/1060-536x354-blur_2.jpg",
+  "/images/1084-536x354-grayscale.jpg",
+  "/images/866-536x354.jpg",
+  "/images/237-536x354.jpg"
+];
+---
+
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>agáta slámová</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style global>
+      @import '../styles/reset.css';
+      @import '../styles/styles.css';
+    </style>
+     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <Navbar client:visible />
+
+    <main>
+      <section class="gallery-section">
+        <div class="gallery-text">
+          <h2>sochařská práce 1</h2>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
+        </div>
+        <Gallery images={galleryImages} client:only="react"></Gallery>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>

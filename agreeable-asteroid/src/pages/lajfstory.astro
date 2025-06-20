@@ -1,0 +1,45 @@
+---
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.astro';
+import Gallery from '../components/Gallery';
+
+const galleryImages = [
+  "/images/870-536x354-blur_2-grayscale.jpg",
+  "/images/1060-536x354-blur_2.jpg",
+  "/images/1084-536x354-grayscale.jpg",
+  "/images/866-536x354.jpg",
+  "/images/237-536x354.jpg"
+];
+---
+
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>agáta slámová</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style global>
+      @import '../styles/reset.css';
+      @import '../styles/styles.css';
+    </style>
+       <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <Navbar client:visible />
+
+    <main>
+      <section class="about-section">
+        <div class="about-image">
+          <img src="/images/BIO/BIO_FOTO.png" alt="Agáta Slámová portrait" />
+        </div>
+        <div class="about-text">
+          <h2>about me</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet iaculis lorem, eleifend tempor neque. Morbi non turpis lacus. Duis ut diam elit. Integer vel tincidunt sapien. Aliquam tristique velit magna, eu finibus nisl eleifend eget. Nunc lacinia congue eros, sed pellentesque nunc faucibus sit amet. Proin quis imperdiet dolor. Nullam massa quam, luctus sit amet hendrerit vitae, accumsan quis tortor. Quisque eleifend justo vel quam congue, in imperdiet ipsum fermentum. In hac habitasse platea dictumst. Maecenas convallis urna vitae gravida scelerisque. Proin ultricies euismod est sit amet faucibus. Suspendisse pulvinar laoreet imperdiet. Sed pharetra metus in ante sollicitudin egestas. Praesent finibus tortor sed consequat consectetur. Sed commodo ut nisl lacinia bibendum.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>

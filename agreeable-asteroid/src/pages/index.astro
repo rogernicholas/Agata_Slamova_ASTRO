@@ -1,38 +1,72 @@
----
-import Navbar from '../components/Navbar.jsx';
-import Footer from '../components/Footer.astro';
-import Carousel from '../components/Carousel.jsx';
-
-const galleryImages = [
-  "/images/870-536x354-blur_2-grayscale.jpg",
-  "/images/1060-536x354-blur_2.jpg",
-  "/images/1084-536x354-grayscale.jpg",
-  "/images/866-536x354.jpg",
-  "/images/237-536x354.jpg"
-];
----
-
-<html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <title>agáta slámová</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style global>
-      @import '../styles/reset.css';
-      @import '../styles/styles.css';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow: hidden; background: black; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        .content {
+            display: flex;
+            gap: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        a { color: #161de8; 
+            text-decoration: none; }
     </style>
-  </head>
-  <body>
-    <Navbar client:visible />
+       <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <canvas id="paintCanvas"></canvas>
+    <div class="content">
+        <p>agáta slámová</p>
+        <a href="main">lets go!</a>
+    </div>
 
-    <main>
-      <h2 class="centered">Aktuality</h2>
-      <Carousel images={galleryImages} client:only="react" />
+    <script>
+        const canvas = document.getElementById("paintCanvas");
+        const ctx = canvas.getContext("2d");
 
-      <h2 class="centered">Reference</h2>
-      <p class="centered">Some reference text goes here.</p>
-    </main>
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    <Footer />
-  </body>
+        let mouse = { x: 0, y: 0, down: false };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+
+        window.addEventListener("mousemove", (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener("mousedown", () => mouse.down = true);
+        window.addEventListener("mouseup", () => mouse.down = false);
+
+        function draw() {
+            if (mouse.down) {
+                ctx.beginPath();
+                ctx.arc(mouse.x, mouse.y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                ctx.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
 </html>

@@ -10,7 +10,7 @@ export default function Carousel({ images = [] }) {
         if (prev <= -100 * (images.length - 1)) {
           return 0;
         }
-        return prev - 0.05; // Slowed down from 0.1 to 0.05
+        return prev - 0.02; // mensi cislo pomalejsi posuv
       });
     };
 
