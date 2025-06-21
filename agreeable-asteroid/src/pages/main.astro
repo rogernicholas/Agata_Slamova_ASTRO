@@ -2,14 +2,34 @@
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.astro';
 import Carousel from '../components/Carousel.jsx';
+import RichText from '../components/RichText.jsx';
+import { client } from '../lib/sanityClient';
+import { urlFor } from '../lib/imageUrl';
 
-const galleryImages = [
-  "/images/870-536x354-blur_2-grayscale.jpg",
-  "/images/1060-536x354-blur_2.jpg",
-  "/images/1084-536x354-grayscale.jpg",
-  "/images/866-536x354.jpg",
-  "/images/237-536x354.jpg"
-];
+// Fetch Aktuality section
+const rawData = await client.fetch(`*[_type == "aktuality"][0]{
+  title,
+  text,
+  images[]{
+    asset,
+    title,
+    desc
+  }
+}`);
+
+const aktuality = rawData
+  ? {
+      title: rawData.title,
+      text: rawData.text,
+      images: rawData.images
+        ?.filter(img => img.asset)
+        .map(img => ({
+          src: urlFor(img.asset).width(800).url(),
+          title: img.title,
+          desc: img.desc
+        }))
+    }
+  : null;
 ---
 
 <html lang="cs">
@@ -21,17 +41,21 @@ const galleryImages = [
       @import '../styles/reset.css';
       @import '../styles/styles.css';
     </style>
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <Navbar client:visible />
 
     <main>
-      <h2 class="centered">Aktuality</h2>
-      <div class="gallery-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
-      </div>
-      <Carousel images={galleryImages} client:only="react" />
+      {aktuality && (
+        <>
+          <h2 class="centered">{aktuality.title}</h2>
+          <div class="gallery-text">
+            <RichText value={aktuality.text} client:only="react" />
+          </div>
+          <Carousel images={aktuality.images} client:only="react" />
+        </>
+      )}
 
       <h2 class="centered">Reference</h2>
       <p class="centered">Some reference text goes here.</p>
