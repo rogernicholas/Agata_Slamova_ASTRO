@@ -47,16 +47,19 @@ const aktuality = rawData
     <Navbar client:visible />
 
     <main>
-      {aktuality && (
-        <>
-          <h2 class="centered">{aktuality.title}</h2>
-          <div class="gallery-text">
-            <RichText value={aktuality.text} client:only="react" />
-          </div>
-          <Carousel images={aktuality.images} client:only="react" />
-        </>
-      )}
-
+      <section class="aktuality-section">
+        <div class="aktuality-text">
+          <h2 class="centered">Aktuality</h2>
+          {aktuality && (
+            <>
+              <div class="gallery-text">
+                <RichText value={aktuality.text} client:only="react" />
+              </div>
+              <Carousel images={aktuality.images} client:only="react" />
+            </>
+          )}
+        </div>
+      </section>
       <h2 class="centered">Reference</h2>
       <p class="centered">Some reference text goes here.</p>
     </main>
