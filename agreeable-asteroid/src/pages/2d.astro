@@ -1,39 +1,60 @@
 ---
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.astro';
-import Gallery from '../components/Gallery';
+import Gallery from '../components/Gallery.jsx';
+import RichText from '../components/RichText.jsx';
+import { client } from '../lib/sanityClient';
+import { urlFor } from '../lib/imageUrl';
 
-const galleryImages = [
-  "/images/870-536x354-blur_2-grayscale.jpg",
-  "/images/1060-536x354-blur_2.jpg",
-  "/images/1084-536x354-grayscale.jpg",
-  "/images/866-536x354.jpg",
-  "/images/237-536x354.jpg"
-];
+
+const rawSections = await client.fetch(`*[_type == "2d"]{
+  title,
+  text,
+  images[]{
+    asset,
+    title,
+    desc
+  }
+}`);
+
+// 
+const sections = rawSections.map(section => ({
+  ...section,
+  images: section.images
+    .filter(img => img.asset) //
+    .map(img => ({
+      src: urlFor(img.asset).width(800).url(), //
+      title: img.title,
+      desc: img.desc
+    }))
+}));
 ---
 
 <html lang="cs">
   <head>
     <meta charset="UTF-8" />
-    <title>agáta slámová</title>
+    <title>Výstavy – Agáta Slámová</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <style global>
       @import '../styles/reset.css';
       @import '../styles/styles.css';
     </style>
-       <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
   </head>
+
   <body>
     <Navbar client:visible />
 
     <main>
-      <section class="gallery-section">
-        <div class="gallery-text">
-          <h2>kresba 1</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
-        </div>
-        <Gallery images={galleryImages} client:only="react"></Gallery>
-      </section>
+      {sections.map(section => (
+        <section class="gallery-section">
+          <div class="gallery-text">
+            <h2>{section.title}</h2>
+            <RichText value={section.text} client:only="react" />
+          </div>
+          <Gallery images={section.images} client:only="react" />
+        </section>
+      ))}
     </main>
 
     <Footer />

@@ -1,15 +1,19 @@
 ---
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.astro';
-import Gallery from '../components/Gallery';
+import Gallery from '../components/Gallery.jsx';
+import RichText from '../components/RichText.jsx';
+import { client } from '../lib/sanityClient';
 
-const galleryImages = [
-  "/images/870-536x354-blur_2-grayscale.jpg",
-  "/images/1060-536x354-blur_2.jpg",
-  "/images/1084-536x354-grayscale.jpg",
-  "/images/866-536x354.jpg",
-  "/images/237-536x354.jpg"
-];
+const sections = await client.fetch(`*[_type == "3d"]{
+  title,
+  text,
+  images[]{
+    "src": asset->url,
+    title,
+    desc
+  }
+}`);
 ---
 
 <html lang="cs">
@@ -27,13 +31,16 @@ const galleryImages = [
     <Navbar client:visible />
 
     <main>
-      <section class="gallery-section">
-        <div class="gallery-text">
-          <h2>sochařská práce 1</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
-        </div>
-        <Gallery images={galleryImages} client:only="react"></Gallery>
-      </section>
+      {sections.map(section => (
+        <section class="gallery-section">
+          <div class="gallery-text">
+            <h2>{section.title}</h2>
+            <RichText value={section.text} client:only="react" />
+          </div>
+    
+          <Gallery images={section.images} client:only="react" />
+        </section>
+      ))}
     </main>
 
     <Footer />

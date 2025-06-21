@@ -1,39 +1,62 @@
 ---
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.astro';
-import Gallery from '../components/Gallery';
+import Gallery from '../components/Gallery.jsx';
+import RichText from '../components/RichText.jsx';
+import { client } from '../lib/sanityClient';
+import { urlFor } from '../lib/imageUrl';
 
-const galleryImages = [
-  { src: "/images/VYSTAVY/Holesovicka-sachta-Sen-Lykantropa-Foto-Anna-Pleslova.jpg", desc: "Sen Lykantropa, Foto: Anna Pleslová" },
-  { src: "/images/VYSTAVY/Holesovicka-sachta-Doomscrolling-Foto-Adela-Kremplova.jpg", desc: "Doomscrolling, Foto: Adéla Kremplová" },
-  { src: "/images/VYSTAVY/Holesovicka-sachta-The-dark-wood-of-error-Foto-Adela-Waldhauserova.jpg", desc: "The dark wood of error, Foto: Adéla Waldhauserová" },
-  { src: "/images/VYSTAVY/Holesovicka-sachta-Dest-chryzantem-v-seno-shnil-Foto-Adela-Waldhauserova.jpg", desc: "Déšť chryzantém v seno shnil, Foto: Adéla Waldhauserová" },
-  { src: "/images/VYSTAVY/e3bacfd2-4147-4d6f-bdc8-c0fec90ac392.jpg", desc: "Výstava, Foto: Unknown" },
-  { src: "/images/VYSTAVY/your-image.jpg", desc: "Your custom description" }
-];
+// Fetch gallery sections
+const rawSections = await client.fetch(`*[_type == "vystavy"]{
+  title,
+  text,
+  images[]{
+    asset,
+    title,
+    desc
+  }
+}`);
+
+// Build sections with resized image URLs
+const sections = rawSections.map(section => ({
+  ...section,
+  images: section.images
+    .filter(img => img.asset) // prevent nulls
+    .map(img => ({
+      src: urlFor(img.asset).width(800).url(), // Resize for better performance
+      title: img.title,
+      desc: img.desc
+    }))
+}));
 ---
 
-<head>
-  <title>agáta slámová</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
-  <style global>
-    @import '../styles/reset.css';
-    @import '../styles/styles.css';
-  </style>
-</head>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Výstavy – Agáta Slámová</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+    <style global>
+      @import '../styles/reset.css';
+      @import '../styles/styles.css';
+    </style>
+  </head>
 
-<Navbar client:visible />
+  <body>
+    <Navbar client:visible />
 
-<main>
-  <section class="gallery-section">
-    <div class="gallery-text">
-      <h2>Holešovická šachta 2025</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut esse, deserunt, voluptate placeat doloremque est consequatur quisquam illo non id nisi unde porro officia reprehenderit fuga quo? Similique, quod voluptatibus.</p>
-    </div>
-    <Gallery images={galleryImages} client:only="react" />
-  </section>
-</main>
+    <main>
+      {sections.map(section => (
+        <section class="gallery-section">
+          <div class="gallery-text">
+            <h2>{section.title}</h2>
+            <RichText value={section.text} client:only="react" />
+          </div>
+          <Gallery images={section.images} client:only="react" />
+        </section>
+      ))}
+    </main>
 
-<Footer />
+    <Footer />
+  </body>
+</html>
